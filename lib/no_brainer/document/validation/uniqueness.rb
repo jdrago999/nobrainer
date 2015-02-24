@@ -40,6 +40,7 @@ module NoBrainer::Document::Validation::Uniqueness
   end
 
   def unlock_unique_fields
+    @locked_unique_fields ||= [ ]
     return unless @locked_unique_fields
     @locked_unique_fields.pop.unlock until @locked_unique_fields.empty?
   end

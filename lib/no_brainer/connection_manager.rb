@@ -21,7 +21,7 @@ module NoBrainer::ConnectionManager
     if NoBrainer::Config.per_thread_connection
       Thread.current[:nobrainer_connection]
     else
-      @connection
+      @connection ||= nil
     end
   end
 

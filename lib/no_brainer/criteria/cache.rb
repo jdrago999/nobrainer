@@ -33,12 +33,17 @@ module NoBrainer::Criteria::Cache
   end
 
   def cached?
+    return unless has_cache?
     !!@cache
   end
 
+  def has_cache?
+    defined? @cache
+  end
+
   def each(options={}, &block)
-    return super unless with_cache? && !options[:no_cache] && block && !@cache_too_small
-    return @cache.each(&block) if @cache
+    return super unless with_cache? && !options[:no_cache] && block && defined?(@cache_too_small) && !@cache_too_small
+    return @cache.each(&block) if has_cache? && @cache
 
     cache = []
     super(options.merge(:no_cache => true)) do |instance|
@@ -50,7 +55,7 @@ module NoBrainer::Criteria::Cache
         @cache_too_small = true
       end
     end
-    @cache = cache unless @cache_too_small
+    @cache = cache unless defined?(@cache_too_small) && @cache_too_small
     self
   end
 
@@ -61,7 +66,7 @@ module NoBrainer::Criteria::Cache
   def self.use_cache_for(*methods)
     methods.each do |method|
       define_method(method) do |*args, &block|
-        @cache ? @cache.__send__(method, *args, &block) : super(*args, &block)
+        ( defined?(@cache) && @cache ) ? @cache.__send__(method, *args, &block) : super(*args, &block)
       end
     end
   end

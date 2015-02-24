@@ -13,13 +13,13 @@ module NoBrainer::Document::MissingAttributes
       assert_access_field(:_type, "The subclass type is not accessible. Use .raw or") if self.class.is_polymorphic
     end
 
-    attrs.keys.each { |attr| clear_missing_field(attr) } if @missing_attributes && options[:from_db]
+    attrs.keys.each { |attr| clear_missing_field(attr) } if defined?(@missing_attributes) && @missing_attributes && options[:from_db]
 
     super
   end
 
   def missing_field?(name)
-    return false unless @missing_attributes
+    return false unless defined?(@missing_attributes) && @missing_attributes
     name = name.to_s
     return false if @cleared_missing_fields.try(:[], name)
     if @missing_attributes[:pluck]
@@ -30,7 +30,7 @@ module NoBrainer::Document::MissingAttributes
   end
 
   def clear_missing_field(name)
-    return unless @missing_attributes
+    return unless defined?(@missing_attributes) && @missing_attributes
     @cleared_missing_fields ||= {}
     @cleared_missing_fields[name.to_s] = true
   end

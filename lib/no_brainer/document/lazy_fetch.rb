@@ -41,7 +41,7 @@ module NoBrainer::Document::LazyFetch
 
         # Lazy loading can also specified through criteria.
         define_method("#{attr}") do
-          return super() unless @lazy_fetch
+          return super() unless defined?(@lazy_fetch) && @lazy_fetch
 
           begin
             super()

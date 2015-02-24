@@ -126,7 +126,7 @@ module NoBrainer::Criteria::OrderBy
 
   def compile_rql_pass2
     rql = super
-    if @rql_rules_pass2
+    if defined?(@rql_rules_pass2) && @rql_rules_pass2
       rql = rql.order_by(*@rql_rules_pass2)
       @rql_rules_pass2 = nil
     end

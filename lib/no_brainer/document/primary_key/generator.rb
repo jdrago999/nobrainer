@@ -44,6 +44,7 @@ module NoBrainer::Document::PrimaryKey::Generator
   def self._generate
     timestamp = (Time.now.to_i - TIME_OFFSET) & TIMESTAMP_MASK
 
+    @last_timestamp ||= 0
     unless @last_timestamp == timestamp
       # more noise is better in the ID, but we prefer to avoid
       # wrapping the sequences so that Model.last on a single

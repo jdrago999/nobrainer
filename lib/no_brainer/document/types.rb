@@ -74,11 +74,11 @@ module NoBrainer::Document::Types
 
       inject_in_layer :types do
         define_method("#{attr}=") do |value|
+          @pending_type_errors ||= { }
           begin
             value = self.class.cast_user_to_model_for(attr, value)
             @pending_type_errors.try(:delete, attr)
           rescue NoBrainer::Error::InvalidType => error
-            @pending_type_errors ||= {}
             @pending_type_errors[attr] = error
           end
           super(value)

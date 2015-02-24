@@ -138,7 +138,7 @@ module NoBrainer::Document::Persistance
   end
 
   def delete
-    unless @destroyed
+    unless defined?(@destroyed) && @destroyed
       NoBrainer.run { selector.delete }
       @destroyed = true
     end
